@@ -9,7 +9,7 @@ permissions:
   packages: write # needed for ghcr.io access
 
 env:
-  OCI_REPO: "oci://ghcr.io/my-org/manifests/${{ github.event.repository.name }}"
+  OCI_REPO: "oci://ghcr.io/${{ github.event.repository.name }}"
 
 jobs:
   repo:
