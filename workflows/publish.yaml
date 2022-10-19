@@ -5,7 +5,7 @@ concurrency: publish-repo
 
 on:
   workflow_dispatch:
-  push:
+  pull:
     branches:
       - main
 
@@ -23,6 +23,6 @@ jobs:
         shell: bash
         run: |
           flux push artifact oci://ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD) \
-	          --path="./" \
-	          --source="$(git config --get remote.origin.url)" \
-	          --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+          --path="./" \
+          --source="$(git config --get remote.origin.url)" \
+          --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
