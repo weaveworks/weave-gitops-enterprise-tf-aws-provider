@@ -1,0 +1,28 @@
+name: Publish Repo
+
+# Do not change this
+concurrency: publish-repo
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup fluxctl
+        uses: fluxcd/fluxctl-action@master
+      - name: 
+        shell: bash
+        run: |
+          flux push artifact oci://ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD) \
+	          --path="./" \
+	          --source="$(git config --get remote.origin.url)" \
+	          --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
