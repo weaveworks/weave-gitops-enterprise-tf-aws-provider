@@ -1,7 +1,7 @@
 name: push-artifact
 
 on:
-  pull:
+  pull_request:
     branches:
       - 'main'
 
