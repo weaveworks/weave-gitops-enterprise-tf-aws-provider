@@ -1,0 +1,36 @@
+name: push-artifact
+
+on:
+  push:
+    branches:
+      - 'main'
+
+permissions:
+  packages: write # needed for ghcr.io access
+
+env:
+  OCI_REPO: "oci://ghcr.io/${{ github.event.repository.name }}"
+
+jobs:
+  kubernetes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push manifests
+        run: |
+          flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
+            --path="./" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+      - name: Deploy latest image
+        run: |
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag latest
