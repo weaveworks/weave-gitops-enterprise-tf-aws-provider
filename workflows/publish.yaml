@@ -1,28 +1,36 @@
-name: Publish Repo
-
-# Do not change this
-concurrency: publish-repo
+name: push-artifact
 
 on:
-  workflow_dispatch:
-  pull:
+  push:
     branches:
-      - main
+      - 'main'
+
+permissions:
+  packages: write # needed for ghcr.io access
+
+env:
+  OCI_REPO: "oci://ghcr.io/my-org/manifests/${{ github.event.repository.name }}"
 
 jobs:
-  release:
+  repo:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+      - name: Login to GHCR
+        uses: docker/login-action@v2
         with:
-          fetch-depth: 0
-      - name: Setup fluxctl
-        uses: fluxcd/fluxctl-action@master
-      - name: 
-        shell: bash
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push manifests
         run: |
-          flux push artifact oci://ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD) \
-          --path="./" \
-          --source="$(git config --get remote.origin.url)" \
-          --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+          flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
+            --path="./" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+      - name: Deploy manifests to staging
+        run: |
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag staging
