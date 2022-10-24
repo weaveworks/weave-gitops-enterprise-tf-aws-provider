@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.1.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WEAVEWORKSBOT_PROFILES_CATALOG_RELEASE_TOKEN }}"
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
       - name: Login to GHCR
