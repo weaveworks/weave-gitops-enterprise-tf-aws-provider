@@ -1,41 +1,23 @@
-name: push-artifact
 
+
+name: clean thanos url for deleted clusters
+
+# Controls when the workflow will run
 on:
   pull_request:
-    branches:
-      - 'main'
+    branches: [ "main" ]
 
-permissions:
-  packages: write # needed for ghcr.io access
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-env:
-  OCI_REPO: "oci://ghcr.io/weaveworks/weave-gitops-enterprise-tf-aws-provider"
-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  push:
+  # This workflow removes the thanos url on cluster deletion
+  non-prod:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: main
-      - name: Setup Flux CLI
-        uses: fluxcd/flux2/action@main
-      - name: Login to GHCR
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Generate manifests
-        run: |
-          kustomize build ./manifests/staging > ./deploy/app.yaml
-      - name: Push manifests
-        run: |
-          flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
-            --path="./deploy" \
-            --source="$(git config --get remote.origin.url)" \
-            --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
-      - name: Deploy manifests to staging
-        run: |
-          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag staging
+          ref: ${{ github.event.pull_request.head.ref }}
