@@ -13,7 +13,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow removes the thanos url on cluster deletion
-  non-prod:
+  publish:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
@@ -21,3 +21,20 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push manifests
+        run: |
+          flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
+            --path="./" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+      - name: Deploy manifests to staging
+        run: |
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag staging
