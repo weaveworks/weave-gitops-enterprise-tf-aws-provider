@@ -12,7 +12,7 @@ env:
   OCI_REPO: "oci://ghcr.io/weaveworks/weave-gitops-enterprise-tf-aws-provider"
 
 jobs:
-  kubernetes:
+  push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
