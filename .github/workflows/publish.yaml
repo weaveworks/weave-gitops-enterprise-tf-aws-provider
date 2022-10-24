@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.1.0
-        with:
-            repository: weaveworks/weave-gitops-enterprise-tf-aws-provider
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
       - name: Login to GHCR
