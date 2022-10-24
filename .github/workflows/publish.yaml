@@ -4,7 +4,7 @@ name: publish
 
 # Controls when the workflow will run
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -39,6 +39,6 @@ jobs:
             --path="./terraform" \
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
-      - name: Deploy manifests to staging
+      - name: Tag latest
         run: |
           flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag latest
