@@ -1,22 +1,30 @@
-name: push-artifact
 
+
+name: publish
+
+# Controls when the workflow will run
 on:
-  push:
-    branches:
-      - 'main'
+  pull_request:
+    branches: [ "main" ]
 
-permissions:
-  packages: write # needed for ghcr.io access
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 
 env:
-  OCI_REPO: "oci://ghcr.io/${{ github.event.repository.name }}"
+  OCI_REPO: "oci://ghcr.io/weaveworks/${{ github.event.repository.name }}"
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  kubernetes:
+  # This workflow removes the thanos url on cluster deletion
+  publish:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: main
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
       - name: Login to GHCR
@@ -28,9 +36,9 @@ jobs:
       - name: Push manifests
         run: |
           flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
-            --path="./" \
+            --path="./terraform" \
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
-      - name: Deploy latest image
+      - name: Tag artifact as latest
         run: |
           flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag latest
