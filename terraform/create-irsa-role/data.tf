@@ -32,22 +32,10 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
       }
 
       dynamic "condition" {
-        for_each = var.values.oidc_subjects_with_wildcards  == null ? local.urls : []
-
         content {
           test     = "StringLike"
           variable = "${statement.value}:sub"
           values   = var.values.oidc_subjects_with_wildcards
-        }
-      }
-
-      dynamic "condition" {
-        for_each =var.values.oidc_fully_qualified_audiences == null ? local.urls : []
-
-        content {
-          test     = "StringLike"
-          variable = "${statement.value}:aud"
-          values   = var.values.oidc_fully_qualified_audiences
         }
       }
     }

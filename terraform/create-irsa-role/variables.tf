@@ -13,9 +13,7 @@ variable "values" {
     max_session_duration = optional(number)
     role_policy_arns = optional(list(string))
     number_of_role_policy_arns = optional(number)
-    oidc_fully_qualified_subjects = optional(set(string))
-    oidc_subjects_with_wildcards = optional(set(string))
-    oidc_fully_qualified_audiences = optional(set(string))
+    oidc_subjects_with_wildcards = optional(string)
     force_detach_policies = optional(bool)
   })
 
