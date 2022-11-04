@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {}
 data "aws_partition" "current" {}
 
 data "aws_eks_cluster" "cluster" {
-   name = var.cluster_name
+   name = var.values.cluster_name
 }
 
 data "aws_iam_policy_document" "assume_role_with_oidc" {
@@ -22,32 +22,32 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
       }
 
       dynamic "condition" {
-        for_each = length(var.oidc_fully_qualified_subjects) > 0 ? local.urls : []
+        for_each = length(var.values.oidc_fully_qualified_subjects) > 0 ? local.urls : []
 
         content {
           test     = "StringEquals"
           variable = "${statement.value}:sub"
-          values   = var.oidc_fully_qualified_subjects
+          values   = var.values.oidc_fully_qualified_subjects
         }
       }
 
       dynamic "condition" {
-        for_each = length(var.oidc_subjects_with_wildcards) > 0 ? local.urls : []
+        for_each = length(var.values.oidc_subjects_with_wildcards) > 0 ? local.urls : []
 
         content {
           test     = "StringLike"
           variable = "${statement.value}:sub"
-          values   = var.oidc_subjects_with_wildcards
+          values   = var.values.oidc_subjects_with_wildcards
         }
       }
 
       dynamic "condition" {
-        for_each = length(var.oidc_fully_qualified_audiences) > 0 ? local.urls : []
+        for_each = length(var.values.oidc_fully_qualified_audiences) > 0 ? local.urls : []
 
         content {
           test     = "StringLike"
           variable = "${statement.value}:aud"
-          values   = var.oidc_fully_qualified_audiences
+          values   = var.values.oidc_fully_qualified_audiences
         }
       }
     }
