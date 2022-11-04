@@ -1,5 +1,6 @@
 variable "policy_document" {
   type = string
+  default     = ""
 }
 
 variable "cluster_name" {
