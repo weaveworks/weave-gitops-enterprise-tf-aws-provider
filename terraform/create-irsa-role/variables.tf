@@ -13,9 +13,9 @@ variable "values" {
     max_session_duration = optional(number)
     role_policy_arns = optional(list(string))
     number_of_role_policy_arns = optional(number)
-    oidc_fully_qualified_subjects = optional(list(string))
-    oidc_subjects_with_wildcards = optional(list(string))
-    oidc_fully_qualified_audiences = optional(list(string))
+    # oidc_fully_qualified_subjects = optional(list(string))
+    oidc_subjects_with_wildcards = optional(set(string))
+    # oidc_fully_qualified_audiences = optional(list(string))
     force_detach_policies = optional(bool)
   })
 
@@ -32,9 +32,9 @@ variable "values" {
     max_session_duration = 3600
     role_policy_arns = []
     number_of_role_policy_arns = null
-    oidc_fully_qualified_subjects = []
+    # oidc_fully_qualified_subjects = []
     oidc_subjects_with_wildcards = []
-    oidc_fully_qualified_audiences = []
+    # oidc_fully_qualified_audiences = []
     force_detach_policies = false
   }
 
