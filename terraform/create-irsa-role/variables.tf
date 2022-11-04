@@ -15,6 +15,7 @@ variable "values" {
     number_of_role_policy_arns = optional(number)
     oidc_fully_qualified_subjects = optional(list(string))
     oidc_subjects_with_wildcards = optional(list(string))
+    oidc_fully_qualified_audiences = optional(list(string))
     force_detach_policies = optional(bool)
   })
 
