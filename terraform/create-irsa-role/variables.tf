@@ -1,94 +1,43 @@
-variable "policy_document" {
-  type = string
-  default     = ""
+variable "values" {
+
+  type = object({
+    policy_document = optional(string)
+    cluster_name = optional(string)
+    aws_account_id = optional(string)
+    tags = optional(map(string))
+    role_name = optional(string)
+    role_name_prefix = optional(string)
+    description = optional(string)
+    role_path = optional(string)
+    role_permissions_boundary_arn = optional(string)
+    max_session_duration = optional(number)
+    role_policy_arns = optional(list(string))
+    number_of_role_policy_arns = optional(number)
+    oidc_fully_qualified_subjects = optional(set(string))
+    oidc_subjects_with_wildcards = optional(set(string))
+    oidc_fully_qualified_audiences = optional(set(string))
+    force_detach_policies = optional(bool)
+  })
+
+  default = {
+    policy_document = ""
+    cluster_name = ""
+    aws_account_id = ""
+    tags = {}
+    role_name = ""
+    role_name_prefix = ""
+    description = ""
+    role_path = "/"
+    role_permissions_boundary_arn =""
+    max_session_duration = 3600
+    role_policy_arns = []
+    number_of_role_policy_arns = null
+    oidc_fully_qualified_subjects = []
+    oidc_subjects_with_wildcards = []
+    oidc_fully_qualified_audiences = []
+    force_detach_policies = false
+  }
+
 }
 
-variable "cluster_name" {
-  description = "Name of EKS cluster for role"
-  type        = string
-  default     = ""
-}
 
-variable "aws_account_id" {
-  description = "The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider"
-  type        = string
-  default     = ""
-}
-
-variable "tags" {
-  description = "A map of tags to add to IAM role resources"
-  type        = map(string)
-  default     = {}
-}
-
-variable "role_name" {
-  description = "IAM role name"
-  type        = string
-  default     = null
-}
-
-variable "role_name_prefix" {
-  description = "IAM role name prefix"
-  type        = string
-  default     = null
-}
-
-variable "description" {
-  description = "IAM Role description"
-  type        = string
-  default     = ""
-}
-
-variable "role_path" {
-  description = "Path of IAM role"
-  type        = string
-  default     = "/"
-}
-
-variable "role_permissions_boundary_arn" {
-  description = "Permissions boundary ARN to use for IAM role"
-  type        = string
-  default     = ""
-}
-
-variable "max_session_duration" {
-  description = "Maximum CLI/API session duration in seconds between 3600 and 43200"
-  type        = number
-  default     = 3600
-}
-
-variable "role_policy_arns" {
-  description = "List of ARNs of IAM policies to attach to IAM role"
-  type        = list(string)
-  default     = []
-}
-
-variable "number_of_role_policy_arns" {
-  description = "Number of IAM policies to attach to IAM role"
-  type        = number
-  default     = null
-}
-
-variable "oidc_fully_qualified_subjects" {
-  description = "The fully qualified OIDC subjects to be added to the role policy"
-  type        = set(string)
-  default     = []
-}
-
-variable "oidc_subjects_with_wildcards" {
-  description = "The OIDC subject using wildcards to be added to the role policy"
-  type        = set(string)
-  default     = []
-}
-
-variable "oidc_fully_qualified_audiences" {
-  description = "The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise."
-  type        = set(string)
-  default     = []
-}
-
-variable "force_detach_policies" {
-  description = "Whether policies should be detached from this role when destroying"
-  type        = bool
-  default     = false
-}
