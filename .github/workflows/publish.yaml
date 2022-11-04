@@ -36,7 +36,7 @@ jobs:
       - name: Push manifests
         run: |
           flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
-            --path="./terraform" \
+            --path="./" \
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
       - name: Tag latest
