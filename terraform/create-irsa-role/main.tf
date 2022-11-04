@@ -7,8 +7,7 @@ locals {
 resource "aws_iam_policy" "this" {
   name_prefix = var.role_name
   description = var.description
-  # policy      = var.policy_document
-  policy      = templatefile("${path.module}/test-policy.json.tpl", {})
+  policy      = var.policy_document
    
 }
 
