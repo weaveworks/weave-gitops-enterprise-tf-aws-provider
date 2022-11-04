@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
       }
 
       dynamic "condition" {
-        for_each = length(var.values.oidc_fully_qualified_subjects) == null ? local.urls : []
+        for_each = var.values.oidc_fully_qualified_subjects == null ? local.urls : []
 
         content {
           test     = "StringEquals"
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
       }
 
       dynamic "condition" {
-        for_each = length(var.values.oidc_subjects_with_wildcards) > 0 ? local.urls : []
+        for_each = var.values.oidc_subjects_with_wildcards  == null ? local.urls : []
 
         content {
           test     = "StringLike"
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
       }
 
       dynamic "condition" {
-        for_each = length(var.values.oidc_fully_qualified_audiences) > 0 ? local.urls : []
+        for_each =var.values.oidc_fully_qualified_audiences == null ? local.urls : []
 
         content {
           test     = "StringLike"
