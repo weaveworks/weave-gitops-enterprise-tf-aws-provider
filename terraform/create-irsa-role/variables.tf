@@ -3,7 +3,7 @@ variable "values" {
   type = object({
     policy_document = optional(string)
     cluster_name = optional(string)
-    aws_account_id = optional(string)
+    # aws_account_id = optional(string)
     tags = optional(map(string))
     role_name = optional(string)
     role_name_prefix = optional(string)
@@ -22,7 +22,7 @@ variable "values" {
   default = {
     policy_document = ""
     cluster_name = ""
-    aws_account_id = ""
+    # aws_account_id = ""
     tags = {}
     role_name = ""
     role_name_prefix = ""
