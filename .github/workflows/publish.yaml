@@ -35,6 +35,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push manifests
         run: |
+          cd terraform
           flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
             --path="./" \
             --source="$(git config --get remote.origin.url)" \
