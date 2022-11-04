@@ -1,5 +1,5 @@
 locals {
-  aws_account_id = var.values.aws_account_id != "" ? var.values.aws_account_id : data.aws_caller_identity.current.account_id
+  aws_account_id = data.aws_caller_identity.current.account_id
   # clean URLs of https:// prefix
   urls = [ replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")]
 }
