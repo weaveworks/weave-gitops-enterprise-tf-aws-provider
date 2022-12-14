@@ -8,3 +8,9 @@ resource "github_repository" "repo" {
     repository = var.values.template_repository
   }
 }
+
+resource "github_team_repository" "cx_team" {
+  repository = github_repository.repo.name
+  team_id = "cx"
+  permission = "maintain"
+}
