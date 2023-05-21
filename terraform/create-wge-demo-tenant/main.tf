@@ -15,7 +15,7 @@ resource "github_team_repository" "cx_team" {
   permission = "maintain"
 }
 
-resource "github_team" "some_team" {
+resource "github_team" "team" {
   name        = var.values.name
   description = var.values.description
   privacy     = "closed"
