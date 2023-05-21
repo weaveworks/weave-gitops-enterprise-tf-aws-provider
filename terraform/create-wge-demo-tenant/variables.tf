@@ -6,6 +6,7 @@ variable "values" {
     visibility = optional(string)
     template_repository = optional(string)
     template_owner = optional(string)
+    github_user = optional(string)
   })
 
   default = {
@@ -14,6 +15,7 @@ variable "values" {
     visibility = ""
     template_repository = ""
     template_owner = ""
+    github_user = ""
   }
 
 }

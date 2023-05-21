@@ -20,3 +20,11 @@ resource "github_team" "team" {
   description = var.values.description
   privacy     = "closed"
 }
+resource "github_team_members" "some_team_members" {
+  team_id  = github_team.team.id
+
+  members {
+    username = var.values.github_user
+    role     = "maintainer"
+  }
+}
