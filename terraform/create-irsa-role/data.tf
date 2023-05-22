@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
       }
 
       dynamic "condition" {
-        for_each = length(var.values.oidc_subjects_with_wildcards) == null ? [] : var.values.oidc_subjects_with_wildcards
+        for_each = length(var.values.oidc_subjects_with_wildcards) == null ? var.values.oidc_subjects_with_wildcards : []
 
         content {
           test     = "StringLike"
