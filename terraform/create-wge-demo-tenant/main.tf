@@ -25,7 +25,7 @@ resource "github_team_members" "some_team_members" {
 
   members {
     username = var.values.github_user
-    role     = "member"
+    role     = "maintainer"
   }
 }
 
