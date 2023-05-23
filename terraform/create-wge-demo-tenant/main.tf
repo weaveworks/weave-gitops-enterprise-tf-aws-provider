@@ -28,3 +28,9 @@ resource "github_team_members" "some_team_members" {
     role     = "maintainer"
   }
 }
+
+resource "github_team_repository" "tenant_team" {
+  repository = github_repository.repo.name
+  team_id = github_team.team.id
+  permission = "write"
+}
