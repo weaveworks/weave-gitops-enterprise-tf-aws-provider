@@ -23,14 +23,11 @@ resource "github_team" "team" {
   description = var.values.description
   privacy     = "closed"
 }
-resource "github_team_members" "some_team_members" {
+resource "github_team_membership" "some_team_members" {
+  for_each = toset(local.github_users)
   team_id  = github_team.team.id
-
-  members {
-    for_each = var.values.github_users
-    username = each.value
-    role     = "maintainer"
-  }
+  username = each.value
+  role     = "maintainer"
 }
 
 resource "github_team_repository" "tenant_team" {
