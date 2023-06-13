@@ -1,4 +1,7 @@
 
+locals{
+  github_users = split(",",  var.values.github_user)
+}
 resource "github_repository" "repo" {
   name        =  var.values.name
   description = var.values.description
@@ -24,7 +27,8 @@ resource "github_team_members" "some_team_members" {
   team_id  = github_team.team.id
 
   members {
-    username = var.values.github_user
+    for_each = var.values.github_users
+    username = each.value
     role     = "maintainer"
   }
 }
